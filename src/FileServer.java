@@ -22,6 +22,7 @@ import java.util.logging.Logger;
  */
 public class FileServer extends UnicastRemoteObject implements FileInterface {
 
+    // H lista twn arxeiwn tou server
     private static ArrayList<File> files;
     
     public FileServer() throws RemoteException {
@@ -30,10 +31,10 @@ public class FileServer extends UnicastRemoteObject implements FileInterface {
     
     public static void main(String[] args) {
         try {
-            // Starting server
+            // Enarksh server
             FileServer server = new FileServer();
             Naming.rebind("//localhost/FileServer", server);
-            // Change accordingly
+            // Comment or uncomment the line below accordingly
             System.setProperty("java.rmi.server.hostname", "192.168.126.1");
             files = new ArrayList();
         } catch (RemoteException | MalformedURLException ex) {
@@ -43,8 +44,8 @@ public class FileServer extends UnicastRemoteObject implements FileInterface {
     }
 
     /**
-     * Create a new text file and add it to existing file list.
-     * Using client's IP as identification.
+     * Dhmiourgia neou arxeiou kai prosthikh tou sth lista arxeiwn.
+     * Xrhsimopoiei to IP tou client gia tautopoihsh.
      * @param filename
      * @param content
      * @throws java.rmi.RemoteException
@@ -56,7 +57,6 @@ public class FileServer extends UnicastRemoteObject implements FileInterface {
             out = new PrintWriter(new BufferedWriter(new FileWriter(filename)));
             out.println(content);
             out.close();
-            // Add to file list
             files.add(new File(getClientHost(), filename));
             System.out.println("Added new file with host " + getClientHost() + " and name " + filename + ".");
         } catch (IOException ex) {
@@ -67,9 +67,9 @@ public class FileServer extends UnicastRemoteObject implements FileInterface {
     }
 
     /**
-     * View content of a text file if it exists.
+     * Anagnwsh tou periexomenou enos arxeiou ean uparxei.
      * @param filename
-     * @return Content of file as String.
+     * @return To periexomeno tou arxeio ws String.
      * @throws java.rmi.RemoteException
      */
     @Override
@@ -92,7 +92,7 @@ public class FileServer extends UnicastRemoteObject implements FileInterface {
     }
 
     /**
-     * Edit a text file (only the file owner).
+     * Epeksergasia enos arxeiou (den epanaprostithetai sth lista).
      * @param filename
      * @param content
      * @throws java.rmi.RemoteException
@@ -110,9 +110,9 @@ public class FileServer extends UnicastRemoteObject implements FileInterface {
     }
 
     /**
-     * Check if a file exists.
+     * Elegxos gia thn uparksh enos arxeiou.
      * @param filename
-     * @return True therefore cannot create a new, or false.
+     * @return False, opote mporei na dhmiourgithei neo 'h true, uparxei hdh.
      */
     @Override
     public boolean exists(String filename) {
@@ -122,14 +122,14 @@ public class FileServer extends UnicastRemoteObject implements FileInterface {
                 return true;
             }
         }
-        // File not found, can be created
+        // Den vrethike, mporei na dhmiourgithei
         return false;
     }
     
     /**
-     * Check if a user (IP) is the owner of a certain file.
+     * Elegxos an enas xrhsths (IP) einai idiokthths enos sugkekrimenou arxeiou.
      * @param filename
-     * @return True therefore editable, or false.
+     * @return True ara mporei na tropopoiithei, 'h false.
      */
     @Override
     public boolean canEdit(String filename) {
@@ -148,8 +148,8 @@ public class FileServer extends UnicastRemoteObject implements FileInterface {
     }
 
     /**
-     * Get a list with all the filenames saved.
-     * @return List with filenames.
+     * Epistrofh listas me ola ta onomata arxeiwn pou einai ston server.
+     * @return Lista me ta filenames.
      * @throws RemoteException 
      */
     @Override
